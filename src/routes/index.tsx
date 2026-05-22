@@ -20,6 +20,7 @@ import {
   Menu,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
+import phonepeQr from "@/assets/phonepe-qr.png";
 import whatsappLogo from "@/assets/whatsapp-logo.svg";
 import { CarImageGallery } from "@/components/CarImageGallery";
 import { getCarCoverImage, getCarImages } from "@/data/carImages";
@@ -54,6 +55,7 @@ const GOOGLE_REVIEWS_URL = "https://share.google/ZdyG5QYMChfkexRFV";
 type Category =
   | "Hatchbacks"
   | "Sedans"
+  | "Automatic"
   | "Compact SUVs"
   | "MUVs"
   | "Adventure"
@@ -74,9 +76,10 @@ const CARS: CarItem[] = [
   { name: "Maruti Suzuki Baleno", category: "Hatchbacks", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
   { name: "Hyundai i20", category: "Hatchbacks", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
   { name: "Maruti Suzuki Swift Dzire", category: "Sedans", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
-  { name: "Maruti Suzuki Dzire Automatic", category: "Sedans", seats: 5, transmission: "Automatic", price12: 2000, price24: 3000, extraHour: 200 },
+  { name: "Maruti Suzuki Dzire Automatic", category: "Automatic", seats: 5, transmission: "Automatic", price12: 2000, price24: 3000, extraHour: 200 },
   { name: "Hyundai Venue", category: "Compact SUVs", seats: 5, transmission: "Manual", price12: 2000, price24: 3000, extraHour: 200 },
   { name: "Kia Syros", category: "Compact SUVs", seats: 5, transmission: "Manual", price12: 2000, price24: 3000, extraHour: 200 },
+  { name: "Kia Sonet", category: "Compact SUVs", seats: 5, transmission: "Automatic Diesel", price12: 2000, price24: 3000, extraHour: 250 },
   { name: "Maruti Suzuki Brezza", category: "Compact SUVs", seats: 5, transmission: "Manual", price12: 2000, price24: 3000, extraHour: 200 },
   { name: "Maruti Suzuki Ertiga", category: "MUVs", seats: 7, transmission: "Manual", price12: 2500, price24: 3500, extraHour: 200 },
   { name: "Toyota Innova", category: "MUVs", seats: 7, transmission: "Manual", price12: 2500, price24: 3500, extraHour: 200 },
@@ -84,7 +87,7 @@ const CARS: CarItem[] = [
   { name: "Toyota Innova Crysta", category: "Premium", seats: 7, transmission: "Manual", price12: 3500, price24: 4500, extraHour: 200 },
 ];
 
-const FILTERS = ["All", "Hatchbacks", "Sedans", "Compact SUVs", "MUVs", "Adventure", "Premium"] as const;
+const FILTERS = ["All", "Hatchbacks", "Sedans", "Automatic", "Compact SUVs", "MUVs", "Adventure", "Premium"] as const;
 
 function HomePage() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
@@ -98,10 +101,17 @@ function HomePage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const filtered = useMemo(
-    () => (filter === "All" ? CARS : CARS.filter((c) => c.category === filter)),
-    [filter],
-  );
+  const filtered = useMemo(() => {
+    if (filter === "All") return CARS;
+    if (filter === "Automatic") {
+      return CARS.filter(
+        (c) =>
+          c.category === "Automatic" ||
+          c.transmission.toLowerCase().includes("automatic"),
+      );
+    }
+    return CARS.filter((c) => c.category === filter);
+  }, [filter]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -180,11 +190,12 @@ function HomePage() {
                 <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
                 SELF-DRIVE RENTALS · VIJAYAWADA
               </div>
-              <h1 className="font-bold tracking-tight text-navy text-5xl sm:text-6xl lg:text-7xl leading-[1.02]">
-                Welcome to <span className="text-gold">AIM Travels</span>
+              <h1 className="font-bold tracking-tight text-navy leading-[1.02]">
+                <span className="block text-2xl sm:text-3xl lg:text-4xl font-semibold text-black">Welcome to</span>
+                <span className="block text-[#FF7417] text-5xl sm:text-6xl lg:text-7xl">AIM Car Travels</span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                Premium self-drive cars — sanitized, insured and ready when you are. Flat per-day pricing, zero surprises.
+                Premium self drive cars and taxi services available from Vijayawada city starting from just 1500
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
                 <a
@@ -275,18 +286,18 @@ function HomePage() {
                     <span className="flex items-center gap-1.5"><Users className="h-4 w-4 text-gold" /> {car.seats} Seats</span>
                     <span className="flex items-center gap-1.5"><Fuel className="h-4 w-4 text-gold" /> {car.transmission}</span>
                   </div>
-                  <div className="flex items-end justify-between pt-3 mt-auto border-t border-border">
-                    <div>
-                      <div className="text-2xl font-bold text-navy">₹{car.price24.toLocaleString()}</div>
-                      <div className="text-xs text-muted-foreground">per day</div>
+                    <div className="flex items-center justify-between pt-3 mt-auto border-t border-border">
+                      <div className="flex-1 pr-4">
+                        <div className="text-base font-bold text-navy leading-tight"><span className="whitespace-nowrap">12hrs - ₹{car.price12.toLocaleString()} / 200 km</span></div>
+                        <div className="text-sm font-bold text-black mt-1 leading-tight"><span className="whitespace-nowrap">24hrs - ₹{car.price24.toLocaleString()} / 400 km</span></div>
+                      </div>
+                      <button
+                        onClick={() => setBookingCar(car)}
+                        className="ml-2 h-12 px-5 py-2.5 rounded-full bg-gold text-gold-foreground text-sm font-semibold shadow-gold hover:-translate-y-0.5 hover:brightness-105 transition-all flex items-center justify-center"
+                      >
+                        Book Now
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setBookingCar(car)}
-                      className="px-5 py-2.5 rounded-full bg-gold text-gold-foreground text-sm font-semibold shadow-gold hover:-translate-y-0.5 hover:brightness-105 transition-all"
-                    >
-                      Book Now
-                    </button>
-                  </div>
                 </div>
               </article>
             );
@@ -503,6 +514,14 @@ function HomePage() {
         </a>
 
         <a
+          href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`}
+          aria-label="Call"
+          className="h-14 w-14 rounded-full bg-blue-600 text-white grid place-items-center shadow-premium-lg hover:scale-110 transition-all"
+        >
+          <Phone className="h-6 w-6 text-white" />
+        </a>
+
+        <a
           href={`https://wa.me/${WHATSAPP_NUMBER}`}
           target="_blank"
           rel="noreferrer"
@@ -519,26 +538,227 @@ function HomePage() {
   );
 }
 
+const MIN_RENTAL_HOURS = 12;
+
+function formatBookingDate(iso: string) {
+  if (!iso) return iso;
+  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function formatBookingTime(time: string) {
+  if (!time) return time;
+  const [h, m] = time.split(":").map(Number);
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true });
+}
+
+function snapMinute15(m: number) {
+  const snapped = Math.round(m / 15) * 15;
+  return String(snapped % 60).padStart(2, "0");
+}
+
+function parseTime24(value: string) {
+  if (!value) return null;
+  const [h, m] = value.split(":").map(Number);
+  const period: "AM" | "PM" = h >= 12 ? "PM" : "AM";
+  const hour12 = h % 12 === 0 ? 12 : h % 12;
+  return {
+    hour12: String(hour12),
+    minute: snapMinute15(m),
+    period,
+  };
+}
+
+function toTime24(hour12: string, minute: string, period: "AM" | "PM") {
+  let h = parseInt(hour12, 10);
+  if (period === "AM") {
+    if (h === 12) h = 0;
+  } else if (h !== 12) {
+    h += 12;
+  }
+  return `${String(h).padStart(2, "0")}:${minute}`;
+}
+
+const HOURS_12 = Array.from({ length: 12 }, (_, i) => String(i + 1));
+const MINUTES = ["00", "15", "30", "45"];
+const timeSelectCls =
+  "h-10 min-h-10 px-1.5 rounded-md bg-muted/50 text-xs font-semibold leading-10 text-navy focus:outline-none focus:ring-1 focus:ring-gold cursor-pointer appearance-none";
+
+function TimePicker12h({
+  value,
+  onChange,
+  required,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+}) {
+  const parsed = parseTime24(value);
+  const hour12 = parsed?.hour12 ?? "";
+  const minute = parsed?.minute ?? "";
+  const period = parsed?.period ?? "AM";
+
+  const emit = (h: string, m: string, p: "AM" | "PM") => {
+    if (h && m) onChange(toTime24(h, m, p));
+    else onChange("");
+  };
+
+  return (
+    <div className="inline-flex w-fit max-w-full items-center gap-1 overflow-visible rounded-lg border border-border bg-white px-1.5 py-1 focus-within:ring-1 focus-within:ring-gold">
+      <input type="hidden" required={required} value={value} readOnly tabIndex={-1} aria-hidden />
+      <select
+        aria-label="Hour"
+        value={hour12}
+        onChange={(e) => emit(e.target.value, minute || "00", period)}
+        className={`${timeSelectCls} w-[2.5rem]`}
+      >
+        <option value="">—</option>
+        {HOURS_12.map((h) => (
+          <option key={h} value={h}>
+            {h}
+          </option>
+        ))}
+      </select>
+      <span className="text-[10px] text-muted-foreground">:</span>
+      <select
+        aria-label="Minute"
+        value={minute}
+        onChange={(e) => emit(hour12, e.target.value, period)}
+        className={`${timeSelectCls} w-[2.5rem]`}
+      >
+        <option value="">—</option>
+        {MINUTES.map((m) => (
+          <option key={m} value={m}>
+            {m}
+          </option>
+        ))}
+      </select>
+      <select
+        aria-label="AM or PM"
+        value={period}
+        onChange={(e) => emit(hour12, minute || "00", e.target.value as "AM" | "PM")}
+        className={`${timeSelectCls} w-[3.75rem] shrink-0 text-center text-sm`}
+      >
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  );
+}
+
+function parseBookingDateTime(date: string, time: string): Date | null {
+  if (!date || !time) return null;
+  const dt = new Date(`${date}T${time}`);
+  return Number.isNaN(dt.getTime()) ? null : dt;
+}
+
+function addHoursToTime(time: string, hours: number) {
+  const [h, m] = time.split(":").map(Number);
+  const dt = new Date(`1970-01-01T${time}`);
+  dt.setHours(h + hours, m, 0, 0);
+  return `${String(dt.getHours()).padStart(2, "0")}:${snapMinute15(dt.getMinutes())}`;
+}
+
+function isMinRentalMet(
+  pickupDate: string,
+  pickupTime: string,
+  returnDate: string,
+  returnTime: string,
+) {
+  const pickup = parseBookingDateTime(pickupDate, pickupTime);
+  const ret = parseBookingDateTime(returnDate, returnTime);
+  if (!pickup || !ret) return false;
+  return ret.getTime() - pickup.getTime() >= MIN_RENTAL_HOURS * 60 * 60 * 1000;
+}
+
 function BookingModal({ car, onClose }: { car: CarItem; onClose: () => void }) {
-  const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", pickup: "", returnDate: "" });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    pickup: "",
+    pickupTime: "",
+    returnDate: "",
+    returnTime: "",
+  });
+  const [timeError, setTimeError] = useState("");
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
   }, []);
 
+  const extraRate = (() => {
+    if (car.category === "Premium" || car.category === "Adventure") return 500;
+    if (car.category === "Compact SUVs" || car.category === "MUVs") return 250;
+    return car.extraHour;
+  })();
+
+  const applyMinReturnTime = (next: typeof form) => {
+    if (!next.pickupTime) return next;
+    return { ...next, returnTime: addHoursToTime(next.pickupTime, MIN_RENTAL_HOURS) };
+  };
+
+  const updatePickup = (patch: Partial<typeof form>) => {
+    setTimeError("");
+    setForm((prev) => {
+      const next = { ...prev, ...patch };
+      if ("pickupTime" in patch && next.pickupTime) {
+        return applyMinReturnTime(next);
+      }
+      return next;
+    });
+  };
+
+  const updateReturnDate = (returnDate: string) => {
+    setTimeError("");
+    setForm((prev) => ({ ...prev, returnDate }));
+  };
+
+  const updateReturnTime = (returnTime: string) => {
+    setTimeError("");
+    setForm((prev) => ({ ...prev, returnTime }));
+  };
+
+  const buildWhatsAppMessage = () =>
+    [
+      "Hi AIM Car Travels! I'd like to book:",
+      "",
+      `Car: ${car.name}`,
+      `Transmission: ${car.transmission}`,
+      `Seats: ${car.seats}`,
+      "",
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      "",
+      `Pickup Date: ${formatBookingDate(form.pickup)}`,
+      `Pickup Time: ${formatBookingTime(form.pickupTime)}`,
+      `Return Date: ${formatBookingDate(form.returnDate)}`,
+      `Return Time: ${formatBookingTime(form.returnTime)}`,
+      "",
+      "Pricing:",
+      `12hrs — ₹${car.price12.toLocaleString("en-IN")}`,
+      `24hrs — ₹${car.price24.toLocaleString("en-IN")}`,
+      `Extra hour — ₹${extraRate}/hr`,
+    ].join("\n");
+
   const sendWhatsApp = () => {
-    const msg = encodeURIComponent(
-      `Hi AIM Car Travels! I'd like to book:\n\nCar: ${car.name}\nName: ${form.name}\nPhone: ${form.phone}\nPickup: ${form.pickup}\nReturn: ${form.returnDate}\n\nI'll share the UPI payment screenshot here.`,
-    );
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => { sendWhatsApp(); onClose(); }, 800);
+    if (!isMinRentalMet(form.pickup, form.pickupTime, form.returnDate, form.returnTime)) {
+      setTimeError(`Return must be at least ${MIN_RENTAL_HOURS} hours after pickup.`);
+      return;
+    }
+    sendWhatsApp();
+    onClose();
   };
 
   return (
@@ -569,28 +789,65 @@ function BookingModal({ car, onClose }: { car: CarItem; onClose: () => void }) {
                 <input required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+91" className={inputCls} />
               </Field>
               <Field label="Pickup Date">
-                <input required type="date" value={form.pickup} onChange={(e) => setForm({ ...form, pickup: e.target.value })} className={inputCls} />
+                <input
+                  required
+                  type="date"
+                  value={form.pickup}
+                  onChange={(e) => updatePickup({ pickup: e.target.value })}
+                  className={inputCls}
+                />
               </Field>
               <Field label="Return Date">
-                <input required type="date" value={form.returnDate} onChange={(e) => setForm({ ...form, returnDate: e.target.value })} className={inputCls} />
+                <input
+                  required
+                  type="date"
+                  value={form.returnDate}
+                  min={form.pickup || undefined}
+                  onChange={(e) => updateReturnDate(e.target.value)}
+                  className={inputCls}
+                />
               </Field>
+              <div className="col-span-2 flex flex-wrap items-end gap-x-4 gap-y-2">
+                <Field label="Pickup Time">
+                  <TimePicker12h
+                    required
+                    value={form.pickupTime}
+                    onChange={(pickupTime) => updatePickup({ pickupTime })}
+                  />
+                </Field>
+                <Field label="Return Time">
+                  <TimePicker12h
+                    required
+                    value={form.returnTime}
+                    onChange={updateReturnTime}
+                  />
+                </Field>
+              </div>
+              <p className="col-span-2 -mt-2 text-[10px] text-muted-foreground leading-snug">
+                Note: Return time defaults to {MIN_RENTAL_HOURS} hours after pickup. Minimum rental is {MIN_RENTAL_HOURS} hours — you may adjust return time if needed.
+              </p>
             </div>
+            {timeError && (
+              <p className="text-sm text-red-600 font-medium -mt-2">{timeError}</p>
+            )}
 
             <div className="rounded-2xl bg-gold-soft/60 border border-gold/30 p-5">
               <div className="text-xs font-bold tracking-[0.18em] text-gold mb-3">PRICING</div>
               <div className="grid grid-cols-3 gap-3 text-center">
                 <Price label="12 Hours" value={`₹${car.price12.toLocaleString()}`} />
                 <Price label="24 Hours" value={`₹${car.price24.toLocaleString()}`} />
-                <Price label="Extra Hour" value={`₹${car.extraHour}/hr`} />
+                <Price label="Extra Hour" value={`₹${extraRate}/hr`} />
               </div>
             </div>
 
-            <div className="rounded-2xl bg-muted/50 border border-border p-5 flex flex-col sm:flex-row gap-5 items-center">
-              <div className="h-32 w-32 rounded-xl bg-white border border-border grid place-items-center text-xs font-bold text-muted-foreground shrink-0">
-                <div className="text-center">
-                  <div className="text-3xl mb-1">▦</div>
-                  UPI QR
-                </div>
+            <div className="rounded-2xl bg-muted/50 border border-border p-5 sm:p-6 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+              <div className="mx-auto sm:mx-0 shrink-0 rounded-2xl bg-white p-3 shadow-[0_6px_28px_rgba(0,0,0,0.14)] ring-2 ring-gold/60 border-2 border-gold/40">
+                <img
+                  src={phonepeQr}
+                  alt="PhonePe UPI QR code — scan to pay ₹1,000 advance"
+                  className="h-44 w-44 sm:h-52 sm:w-52 object-contain"
+                />
+                <p className="mt-2 text-center text-[11px] font-semibold text-navy/80 tracking-wide">Scan to pay</p>
               </div>
               <div className="flex-1 text-center sm:text-left">
                 <div className="text-xs font-bold tracking-[0.18em] text-gold">UPI ADVANCE</div>
@@ -612,8 +869,8 @@ function BookingModal({ car, onClose }: { car: CarItem; onClose: () => void }) {
               <button type="button" onClick={onClose} className="px-6 py-3 rounded-full border border-border bg-white font-semibold hover:bg-muted transition-all">
                 Cancel
               </button>
-              <button type="submit" disabled={submitted} className="px-6 py-3 rounded-full bg-gold text-gold-foreground font-semibold shadow-gold hover:-translate-y-0.5 transition-all disabled:opacity-60">
-                {submitted ? "Sending..." : "Submit Booking"}
+              <button type="submit" className="px-6 py-3 rounded-full bg-gold text-gold-foreground font-semibold shadow-gold hover:-translate-y-0.5 transition-all">
+                Submit Booking
               </button>
             </div>
           </form>

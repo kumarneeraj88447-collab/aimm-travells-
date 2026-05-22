@@ -17,6 +17,10 @@ import syrosFront from "@/assets/cars/kia-syros/front.png";
 import syrosBack from "@/assets/cars/kia-syros/back.png";
 import syrosSide1 from "@/assets/cars/kia-syros/side-1.png";
 import syrosSide2 from "@/assets/cars/kia-syros/side-2.png";
+import sonetFront from "@/assets/cars/kia-sonet/front.png";
+import sonetBack from "@/assets/cars/kia-sonet/back.png";
+import sonetSide from "@/assets/cars/kia-sonet/side.png";
+import sonetTop from "@/assets/cars/kia-sonet/top.png";
 import brezzaFront from "@/assets/cars/maruti-suzuki-brezza/front.png";
 import brezzaBack from "@/assets/cars/maruti-suzuki-brezza/back.png";
 import brezzaSide1 from "@/assets/cars/maruti-suzuki-brezza/side-1.png";
@@ -50,6 +54,7 @@ export const CAR_IMAGES: Record<string, string[]> = {
   "Maruti Suzuki Dzire Automatic": [dzireAutoFront, dzireAutoBack],
   "Hyundai Venue": [venueFront, venueBack, venueSide],
   "Kia Syros": [syrosFront, syrosBack, syrosSide1, syrosSide2],
+  "Kia Sonet": [sonetFront, sonetBack, sonetSide, sonetTop],
   "Maruti Suzuki Brezza": [brezzaFront, brezzaBack, brezzaSide1, brezzaSide2],
   "Maruti Suzuki Ertiga": [ertigaFront, ertigaBack, ertigaSide],
   "Toyota Innova": [innovaFront, innovaBack],
