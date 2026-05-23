@@ -48,7 +48,22 @@ const WHATSAPP_NUMBER = "917658982869";
 const PHONE_DISPLAY = "+91 76589 82869";
 const EMAIL = "aimcartravels@gmail.com";
 const ADDRESS = "Shop No.3, near Dr. Varun Cardiac Hospital, beside Trendset Mall, Sai Nagar, Kala Nagar, Acharya Ranga Nagar, Benz Circle, Vijayawada, Andhra Pradesh 520008";
-const MAPS_URL = "https://maps.app.goo.gl/WT1udKbtqQUYktYi8?g_st=iw";
+const MAPS_URL = "https://www.google.com/maps/place/Self+Drive+Cars+in+Vijayawada+-+Aim+Car+Travels/@16.4999852,80.654886,17z/";
+const MAPS_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ADDRESS)}`;
+const MAPS_EMBED_URL = "https://www.google.com/maps?q=Self+Drive+Cars+in+Vijayawada+-+Aim+Car+Travels&output=embed";
+
+function DirectionsMap() {
+  return (
+    <iframe
+      src={MAPS_EMBED_URL}
+      title="Self Drive Cars in Vijayawada - Aim Car Travels"
+      className="w-full h-[min(450px,55vw)] min-h-[280px] border-0"
+      loading="lazy"
+      allowFullScreen
+      referrerPolicy="no-referrer-when-downgrade"
+    />
+  );
+}
 const UPI_ID = "aimcartravels@upi";
 const GOOGLE_REVIEWS_URL = "https://share.google/ZdyG5QYMChfkexRFV";
 
@@ -118,13 +133,21 @@ function HomePage() {
       {/* NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-border/60 shadow-[0_2px_20px_-10px_rgba(0,0,0,0.08)]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-          <a href="#home" className="flex items-center gap-3 group">
-            <div className="h-12 w-12 rounded-xl bg-white shadow-premium grid place-items-center overflow-hidden ring-1 ring-border">
-              <img src={logo} alt="AIM Car Travels" className="h-9 w-9 object-contain" />
+          <a href="#home" className="flex items-center gap-1 sm:gap-2 lg:gap-3 group shrink-0">
+            <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl bg-white shadow-premium grid place-items-center overflow-hidden ring-1 ring-border shrink-0">
+              <img src={logo} alt="AIM Car Travels" className="h-11 w-11 sm:h-12 sm:w-12 object-contain" />
             </div>
-            <div className="leading-tight">
-              <div className="font-bold text-navy text-base sm:text-lg tracking-tight">AIM Car Travels</div>
-              <div className="text-[10px] sm:text-[11px] font-semibold tracking-[0.18em] text-gold">PREMIUM RENTALS</div>
+            <div className="leading-none min-w-0 flex flex-col items-start">
+              <div className="w-full text-left font-bold text-navy text-sm sm:text-base lg:text-lg tracking-tight whitespace-nowrap">AIM Car Travels</div>
+              <div className="w-full text-left text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.22em] text-gold whitespace-nowrap">
+                PREMIUM RENTALS
+              </div>
+              <div className="w-full text-center text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.22em] text-gold/70 whitespace-nowrap">
+                &
+              </div>
+              <div className="w-full text-left text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.22em] text-gold whitespace-nowrap">
+                TAXI SERVICES
+              </div>
             </div>
           </a>
 
@@ -191,11 +214,17 @@ function HomePage() {
                 SELF-DRIVE RENTALS · VIJAYAWADA
               </div>
               <h1 className="font-bold tracking-tight text-navy leading-[1.02]">
-                <span className="block text-2xl sm:text-3xl lg:text-4xl font-semibold text-black">Welcome to</span>
-                <span className="block text-[#FF7417] text-5xl sm:text-6xl lg:text-7xl">AIM Car Travels</span>
+                <span className="block text-2xl sm:text-3xl lg:text-4xl font-semibold text-black mb-2 sm:mb-3 lg:mb-4">
+                  Welcome to
+                </span>
+                <span className="group block text-5xl sm:text-6xl lg:text-7xl font-serif font-extrabold text-amber-500 drop-shadow-[0_2px_8px_rgba(245,158,11,0.18)] transition-transform duration-300 hover:-translate-y-1">
+                  <span className="inline-block rounded-2xl bg-amber-50/80 px-3 py-1 ring-1 ring-amber-200/70 transition-all duration-300 group-hover:bg-amber-100 group-hover:shadow-[0_12px_30px_-12px_rgba(245,158,11,0.45)]">
+                    AIM Car Travels
+                  </span>
+                </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                Premium self drive cars and taxi services available from Vijayawada city starting from just 1500
+                Premium self drive cars and taxi services available from Vijayawada city starting @ ₹1500
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
                 <a
@@ -314,7 +343,7 @@ function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Shield, title: "Verified & Insured", desc: "Every car is sanitized, serviced and fully insured for your safety." },
+              { icon: Shield, title: "Verified & Serviced", desc: "Every car is fully serviced and sanitized." },
               { icon: IndianRupee, title: "Transparent Pricing", desc: "Flat per-day rates. No hidden fees, no surprises at drop-off." },
               { icon: Clock, title: "24/7 Availability", desc: "Book any time. Pickup and drop available around the clock." },
               { icon: Headphones, title: "Real Human Support", desc: "Talk to us directly on WhatsApp — no bots, no waiting." },
@@ -328,6 +357,28 @@ function HomePage() {
                 </div>
                 <h3 className="font-bold text-navy text-lg mb-2">{f.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="py-14 lg:py-16 bg-gradient-to-b from-yellow-50 to-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { value: "2600", label: "Completed Orders" },
+              { value: "2500", label: "Happy Customers" },
+              { value: "13", label: "Vehicles" },
+              { value: "10", label: "Years Experience" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="group rounded-2xl bg-white px-6 py-10 text-center shadow-premium border border-yellow-100 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-premium-lg hover:border-yellow-200"
+              >
+                <div className="text-5xl sm:text-6xl font-extrabold text-gold leading-none">{stat.value}</div>
+                <div className="mt-4 text-lg text-slate-600 transition-colors duration-300 group-hover:text-navy">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -433,6 +484,15 @@ function HomePage() {
               );
             })}
           </div>
+
+          <div className="mt-10">
+            <p className="text-center text-sm text-muted-foreground mb-3">
+              Driving route to our office — allow location for directions from where you are.
+            </p>
+            <div className="rounded-2xl overflow-hidden border border-border shadow-premium bg-white">
+              <DirectionsMap />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -450,7 +510,7 @@ function HomePage() {
                   <div className="text-[10px] font-semibold tracking-[0.18em] text-gold">PREMIUM RENTALS</div>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground">Premium self-drive car rentals across Vijayawada. Clean cars, honest pricing, real human support.</p>
+              <p className="text-sm text-muted-foreground">Premium self-drive car rentals and taxi services across Vijayawada. Clean cars, honest pricing.</p>
             </div>
             <div>
               <div className="font-bold text-navy mb-4 text-sm">Quick links</div>
