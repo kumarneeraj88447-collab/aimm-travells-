@@ -206,13 +206,9 @@ function HomePage() {
           <div className="absolute top-0 right-0 h-[600px] w-[600px] rounded-full bg-gold-soft blur-3xl opacity-60" />
           <div className="absolute -bottom-32 -left-32 h-[500px] w-[500px] rounded-full bg-accent blur-3xl opacity-50" />
         </div>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-10 md:pt-8 md:pb-12">
           <div className="grid place-items-center">
-            <div className="space-y-7 animate-in fade-in slide-in-from-bottom-6 duration-700 text-center mx-auto">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-premium border border-border text-xs font-semibold tracking-wider text-navy">
-                <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
-                SELF-DRIVE RENTALS · VIJAYAWADA
-              </div>
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-6 duration-700 text-center mx-auto">
               <h1 className="font-bold tracking-tight text-navy leading-[1.02]">
                 <span className="block text-2xl sm:text-3xl lg:text-4xl font-semibold text-black mb-2 sm:mb-3 lg:mb-4">
                   Welcome to
@@ -257,7 +253,7 @@ function HomePage() {
       </section>
 
       {/* CARS */}
-      <section id="cars" className="py-20 lg:py-28 bg-gradient-to-b from-white to-gold-soft/30">
+      <section id="cars" className="py-12 lg:py-16 bg-gradient-to-b from-white to-gold-soft/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
             <div>
