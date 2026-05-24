@@ -104,6 +104,32 @@ const CARS: CarItem[] = [
 
 const FILTERS = ["All", "Hatchbacks", "Sedans", "Automatic", "Compact SUVs", "MUVs", "Adventure", "Premium"] as const;
 
+// Highlight tags for cars (matches substrings of `car.name`)
+const carHighlights: Record<string, string> = {
+  Swift: "Easy City Driver",
+  Dzire: "Maximum Mileage",
+  Baleno: "Premium Hatchback",
+  "i20": "Stylish & Smooth",
+  Syros: "Top Safety Rating",
+  Sonet: "Luxury & Ease",
+  Venue: "Smart Urban SUV",
+  Brezza: "Reliable Family SUV",
+  Ertiga: "Budget Family Tripper",
+  Innova: "Proven Comfort",
+  Crysta: "VIP Travel Executive",
+  Thar: "Adventure & Style",
+  // optional entries if present
+  "XUV 7XO": "Futuristic Luxury SUV",
+  "Scorpio N": "The Big Daddy SUV",
+};
+
+function getCarHighlight(name: string) {
+  for (const key of Object.keys(carHighlights)) {
+    if (name.includes(key)) return carHighlights[key];
+  }
+  return null;
+}
+
 function HomePage() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
   const [bookingCar, setBookingCar] = useState<CarItem | null>(null);
@@ -156,6 +182,7 @@ function HomePage() {
             <a href="#why" className="hover:text-gold transition-colors">Why Us</a>
             <a href="#about" className="hover:text-gold transition-colors">About</a>
             <a href="#contact" className="hover:text-gold transition-colors">Contact</a>
+            <a href="#policies" className="hover:text-gold transition-colors">Policies</a>
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
@@ -189,9 +216,9 @@ function HomePage() {
         {mobileOpen && (
           <div className="lg:hidden border-t border-border bg-white">
             <div className="px-6 py-4 flex flex-col gap-3 text-sm font-medium">
-              {["cars", "why", "about", "contact"].map((id) => (
+              {["cars", "why", "about", "contact", "policies"].map((id) => (
                 <a key={id} href={`#${id}`} onClick={() => setMobileOpen(false)} className="py-2 capitalize">
-                  {id === "why" ? "Why Us" : id}
+                  {id === "why" ? "Why Us" : id === "policies" ? "Policies" : id}
                 </a>
               ))}
               <a href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} className="py-2 text-gold">{PHONE_DISPLAY}</a>
@@ -252,6 +279,8 @@ function HomePage() {
         </div>
       </section>
 
+      
+
       {/* CARS */}
       <section id="cars" className="py-12 lg:py-16 bg-gradient-to-b from-white to-gold-soft/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -284,6 +313,7 @@ function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {filtered.map((car) => {
               const coverImage = getCarCoverImage(car.name);
+              const highlight = getCarHighlight(car.name);
               return (
               <article
                 key={car.name}
@@ -307,6 +337,13 @@ function HomePage() {
                 </div>
                 <div className="p-6 flex flex-col gap-4 flex-1">
                   <h3 className="text-xl font-bold text-navy">{car.name}</h3>
+                  {highlight && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="inline-flex items-center rounded-full bg-[#fff7da] px-4 py-2 text-xs md:text-sm font-semibold text-[#8a6a00] border border-[#f3df8c] shadow-sm">
+                        ✨ {highlight}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-5 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1.5"><Users className="h-4 w-4 text-gold" /> {car.seats} Seats</span>
                     <span className="flex items-center gap-1.5"><Fuel className="h-4 w-4 text-gold" /> {car.transmission}</span>
@@ -495,49 +532,335 @@ function HomePage() {
       {/* FOOTER */}
       <footer className="bg-white border-t border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-11 w-11 rounded-xl bg-white shadow-premium grid place-items-center overflow-hidden ring-1 ring-border">
-                  <img src={logo} alt="AIM Car Travels" className="h-8 w-8 object-contain" />
+          {/* footer columns moved below policies (see after policies block) */}
+
+          {/* Policies & Guidelines (replaced with new layout) */}
+          <section id="policies" className="w-full bg-[#f8f6ee] py-20 px-5 md:px-10">
+            <div className="max-w-7xl mx-auto">
+
+              <div className="text-center mb-16">
+                <p className="text-[#d4af37] uppercase tracking-[0.3em] text-sm font-semibold mb-4">RENTAL TERMS</p>
+
+                <h2 className="text-3xl md:text-5xl font-bold text-[#111] mb-5">Policies & Guidelines</h2>
+
+                <p className="text-gray-600 max-w-3xl mx-auto text-base md:text-lg leading-relaxed">Transparent rental policies designed to ensure a safe, secure, and hassle-free self-drive experience with AIM Car Travels.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-14 h-14 min-w-[56px] rounded-2xl bg-[#fff6d8] flex items-center justify-center text-2xl">🛡️</div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#111]">Customer Eligibility & Verification</h3>
+                      <p className="text-gray-500 text-sm mt-1">Driver eligibility & mandatory verification requirements</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p>• Minimum age required: <strong>25 years</strong></p>
+                    <p>• Valid permanent LMV driving license older than <strong>3 years</strong> is mandatory.</p>
+                    <div>
+                      <p className="font-semibold text-[#111] mb-2">Mandatory Documents:</p>
+                      <div className="space-y-2 ml-2">
+                        <p>○ Aadhaar Card</p>
+                        <p>○ Car Driving License</p>
+                        <p>○ Two-Wheeler with RC</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-bold text-navy">AIM Car Travels</div>
-                  <div className="text-[10px] font-semibold tracking-[0.18em] text-gold">PREMIUM RENTALS</div>
+
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-14 h-14 min-w-[56px] rounded-2xl bg-[#fff6d8] flex items-center justify-center text-2xl">💳</div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#111]">Payment & Security Deposit Policy</h3>
+                      <p className="text-gray-500 text-sm mt-1">Advance booking, rental payment & security deposit rules</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5 text-gray-700 leading-relaxed">
+                    <div>
+                      <h4 className="font-semibold text-[#111] mb-2">Booking Confirmation & Advance</h4>
+                      <p>• Minimum <strong>20%</strong> advance payment required to reserve any vehicle.</p>
+                      <p>• Advance amount is strictly <strong>100% non-refundable</strong>.</p>
+                      <p>• Vehicle gets locked exclusively for your dates after payment.</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-[#111] mb-2">Full Rental Payment</h4>
+                      <p>• Remaining rental balance must be cleared before vehicle handover.</p>
+                      <p>• Vehicle will not be released for partial payments.</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-[#111] mb-2">Refundable Security Deposit</h4>
+                      <p>• Security deposit starts from <strong>₹20,000</strong>.</p>
+                      <p>• Deposit may vary depending on vehicle model and rental duration.</p>
+                      <p>• Deposit is processed separately from rental payment.</p>
+                      <p>• Refund initiated immediately after successful inspection during drop-off.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-14 h-14 min-w-[56px] rounded-2xl bg-[#fff0e2] flex items-center justify-center text-2xl">⚠️</div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#111]">Vehicle Damage & Client Liability</h3>
+                      <p className="text-gray-500 text-sm mt-1">Damage responsibility & zero-insurance policy</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5 text-gray-700 leading-relaxed">
+                    <div>
+                      <h4 className="font-semibold text-[#111] mb-2">Vehicle Handover Rule</h4>
+                      <p>• Vehicle is delivered in clean, scratch-free condition.</p>
+                      <p>• Customer must record complete photos/videos during pickup.</p>
+                      <p>• Vehicle must be returned in same “As-Is” condition.</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-[#111] mb-2">Zero Insurance Policy</h4>
+                      <p>• Insurance claims are not applicable on self-drive rentals.</p>
+                      <p>• No insurance cover for vehicle, customer or third parties.</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-[#111] mb-2">Financial Responsibility</h4>
+                      <p>• Customer is liable for 100% scratches, dents & body damages.</p>
+                      <p>• Major repair costs must be fully paid by customer.</p>
+                      <p>• Damages are deducted from security deposit instantly.</p>
+                      <p>• Any repair amount exceeding deposit must be cleared immediately.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-14 h-14 min-w-[56px] rounded-2xl bg-[#fff6d8] flex items-center justify-center text-2xl">⚖️</div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#111]">Primary Renter Responsibility</h3>
+                      <p className="text-gray-500 text-sm mt-1">Legal & financial accountability during rental period</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p>• The registered customer remains fully responsible throughout rental tenure.</p>
+                    <p>• Liability cannot be transferred even if another person drives the vehicle.</p>
+                    <p>• Customer is responsible for all traffic fines, red-light violations & challans.</p>
+                    <p>• Rash driving, overspeeding & reckless handling damages will be recovered fully.</p>
+                    <p>• DUI, illegal racing or criminal activity leads to immediate deposit forfeiture.</p>
+                    <p>• Excuses such as “my friend was driving” will not be entertained.</p>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+
+                <div className="bg-white rounded-[24px] border border-gray-200 shadow-md p-6 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="text-4xl mb-4">⛽</div>
+                  <h3 className="text-xl font-bold text-[#111] mb-4">Fuel Policy</h3>
+                  <div className="space-y-3 text-gray-700 leading-relaxed">
+                    <p>• Vehicle must be returned with same fuel level.</p>
+                    <p>• Extra fuel is non-refundable.</p>
+                    <p>• Fuel shortage amount + ₹500 service fee deducted from deposit.</p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[24px] border border-gray-200 shadow-md p-6 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="text-4xl mb-4">🛞</div>
+                  <h3 className="text-xl font-bold text-[#111] mb-4">Tyre & Underbody Damage</h3>
+                  <div className="space-y-3 text-gray-700 leading-relaxed">
+                    <p>• Tyre cuts, bursts & rim bends are customer liability.</p>
+                    <p>• Underbody damages due to careless driving will be fully charged.</p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[24px] border border-gray-200 shadow-md p-6 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="text-4xl mb-4">⏰</div>
+                  <h3 className="text-xl font-bold text-[#111] mb-4">Extensions & Late Return</h3>
+                  <div className="space-y-3 text-gray-700 leading-relaxed">
+                    <p>• Extension requests must be made 12 hours before drop-off.</p>
+                    <p>• Unauthorized late returns attract ₹1,000 per hour penalty.</p>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="mt-20">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#111] mb-4">Penalty & Fine Charges</h2>
+                  <p className="text-gray-600">Please follow all rental guidelines to avoid penalties.</p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🏎️</div>
+                    <h4 className="text-xl font-semibold mb-3">Over-Speeding</h4>
+                    <p className="text-gray-600">₹1,000 per alert tracked via live GPS.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🚬</div>
+                    <h4 className="text-xl font-semibold mb-3">Smoking Inside Vehicle</h4>
+                    <p className="text-gray-600">₹1,500 + professional deep cleaning fee.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🐾</div>
+                    <h4 className="text-xl font-semibold mb-3">Extreme Dirt / Pet Hair</h4>
+                    <p className="text-gray-600">₹1,000 deep wash fee.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🚦</div>
+                    <h4 className="text-xl font-semibold mb-3">Traffic Challans</h4>
+                    <p className="text-gray-600">Government fine + ₹200 handling fee.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🔋</div>
+                    <h4 className="text-xl font-semibold mb-3">Battery Discharge</h4>
+                    <p className="text-gray-600">₹2,000 service fee for negligence.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🔑</div>
+                    <h4 className="text-xl font-semibold mb-3">Lost Smart Key</h4>
+                    <p className="text-gray-600">Replacement + towing + idle rental charges.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🏖️</div>
+                    <h4 className="text-xl font-semibold mb-3">Off-Road / Beach Driving</h4>
+                    <p className="text-gray-600">₹5,000 flat penalty.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🚚</div>
+                    <h4 className="text-xl font-semibold mb-3">Vehicle Abandonment</h4>
+                    <p className="text-gray-600">₹10,000 recovery fine + towing charges.</p>
+                  </div>
+
+                  <div className="bg-white rounded-[24px] border border-gray-200 p-6 shadow-md hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                    <div className="text-4xl mb-4">🛣️</div>
+                    <h4 className="text-xl font-semibold mb-3">FASTag Tampering</h4>
+                    <p className="text-gray-600">₹2,000 replacement penalty.</p>
+                  </div>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground">Premium self-drive car rentals and taxi services across Vijayawada. Clean cars, honest pricing.</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-20">
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-14 h-14 rounded-2xl bg-[#fff6d8] flex items-center justify-center text-2xl">🌍</div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#111]">Inter-State Travel</h3>
+                      <p className="text-gray-500 text-sm">State permits & toll policies</p>
+                    </div>
+                  </div>
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p>• All India Tourist Permits are active on our vehicles.</p>
+                    <p>• Border entry taxes & permit fees must be paid by customer.</p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-14 h-14 rounded-2xl bg-[#fff6d8] flex items-center justify-center text-2xl">🛣️</div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#111]">FASTag Policy</h3>
+                      <p className="text-gray-500 text-sm">Toll tracking & deductions</p>
+                    </div>
+                  </div>
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p>• Toll charges will be deducted transparently from security deposit.</p>
+                    <p>• Customers may recharge FASTag using PhonePe/GPay if required.</p>
+                    <p>• FASTag sticker tampering attracts ₹2,000 penalty.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="text-4xl mb-4">🚓</div>
+                  <h3 className="text-2xl font-bold text-[#111] mb-5">Vehicle Abandonment & Seizure</h3>
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p>• Unauthorized vehicle abandonment attracts ₹10,000 recovery fine.</p>
+                    <p>• Towing expenses & accumulated rent must be cleared by customer.</p>
+                    <p>• Police seizure due to negligence remains customer responsibility.</p>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[28px] border border-gray-200 shadow-lg p-6 md:p-8 hover:shadow-premium-lg hover:-translate-y-1 transition-all">
+                  <div className="text-4xl mb-4">⚖️</div>
+                  <h3 className="text-2xl font-bold text-[#111] mb-5">Legal Jurisdiction</h3>
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    <p>Any legal disputes, police matters or mediation arising from the rental agreement shall fall exclusively under Vijayawada jurisdiction, Andhra Pradesh.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-20">
+                <div className="bg-white rounded-[32px] border border-gray-200 shadow-lg p-8 md:p-12 text-center">
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#111] mb-5">Customer Agreement</h3>
+                  <p className="text-gray-700 text-base md:text-lg leading-relaxed max-w-4xl mx-auto">By proceeding with the booking, the customer confirms that they have read, understood, and agreed to all rental terms, liabilities, penalties, vehicle usage policies, and legal clauses mentioned above.</p>
+                </div>
+              </div>
+
             </div>
-            <div>
-              <div className="font-bold text-navy mb-4 text-sm">Quick links</div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {[
-                  { l: "Cars", h: "#cars" },
-                  { l: "Why Us", h: "#why" },
-                  { l: "About", h: "#about" },
-                  { l: "Contact", h: "#contact" },
-                ].map((x) => (
-                  <li key={x.l}><a href={x.h} className="hover:text-gold transition-colors">{x.l}</a></li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <div className="font-bold text-navy mb-4 text-sm">Contact</div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} className="hover:text-gold transition-colors">{PHONE_DISPLAY}</a></li>
-                <li><a href={`mailto:${EMAIL}`} className="hover:text-gold transition-colors">{EMAIL}</a></li>
-                <li><a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-gold transition-colors">{ADDRESS}</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-bold text-navy mb-4 text-sm">Follow us</div>
-              <div className="flex gap-3">
-                <a href="https://www.instagram.com/self_drive_cars_in_vijayawada?igsh=bWpjcWg2cXB1ZW02" target="_blank" rel="noreferrer" className="h-11 w-11 rounded-full bg-gold-soft text-gold grid place-items-center hover:bg-gold hover:text-gold-foreground transition-all">
-                  <Instagram className="h-6 w-6" />
-                </a>
-                <a href="https://www.facebook.com/share/1GnzVHdjG7/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="h-11 w-11 rounded-full bg-gold-soft text-gold grid place-items-center hover:bg-gold hover:text-gold-foreground transition-all">
-                  <Facebook className="h-6 w-6" />
-                </a>
+          </section>
+
+          <div className="mt-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-11 w-11 rounded-xl bg-white shadow-premium grid place-items-center overflow-hidden ring-1 ring-border">
+                      <img src={logo} alt="AIM Car Travels" className="h-8 w-8 object-contain" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-navy">AIM Car Travels</div>
+                      <div className="text-[10px] font-semibold tracking-[0.18em] text-gold">PREMIUM RENTALS</div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Premium self-drive car rentals and taxi services across Vijayawada. Clean cars, honest pricing.</p>
+                </div>
+                <div>
+                  <div className="font-bold text-navy mb-4 text-sm">Quick links</div>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    {[
+                      { l: "Cars", h: "#cars" },
+                      { l: "Why Us", h: "#why" },
+                      { l: "About", h: "#about" },
+                      { l: "Contact", h: "#contact" },
+                    ].map((x) => (
+                      <li key={x.l}><a href={x.h} className="hover:text-gold transition-colors">{x.l}</a></li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <div className="font-bold text-navy mb-4 text-sm">Contact</div>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li><a href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} className="hover:text-gold transition-colors">{PHONE_DISPLAY}</a></li>
+                    <li><a href={`mailto:${EMAIL}`} className="hover:text-gold transition-colors">{EMAIL}</a></li>
+                    <li><a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-gold transition-colors">{ADDRESS}</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <div className="font-bold text-navy mb-4 text-sm">Follow us</div>
+                  <div className="flex gap-3">
+                    <a href="https://www.instagram.com/self_drive_cars_in_vijayawada?igsh=bWpjcWg2cXB1ZW02" target="_blank" rel="noreferrer" className="h-11 w-11 rounded-full bg-gold-soft text-gold grid place-items-center hover:bg-gold hover:text-gold-foreground transition-all">
+                      <Instagram className="h-6 w-6" />
+                    </a>
+                    <a href="https://www.facebook.com/share/1GnzVHdjG7/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="h-11 w-11 rounded-full bg-gold-soft text-gold grid place-items-center hover:bg-gold hover:text-gold-foreground transition-all">
+                      <Facebook className="h-6 w-6" />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
