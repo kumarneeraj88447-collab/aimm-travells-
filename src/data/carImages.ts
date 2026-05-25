@@ -38,6 +38,8 @@ import tharInterior2 from "@/assets/cars/mahindra-thar/interior-2.png";
 import crystaFront from "@/assets/cars/toyota-innova-crysta/front.png";
 import crystaBack from "@/assets/cars/toyota-innova-crysta/back.png";
 import crystaSide from "@/assets/cars/toyota-innova-crysta/side.png";
+import xuv7xoFront from "@/assets/cars/mahindra-xuv-7xo/front.png";
+import xuv7xoSide from "@/assets/cars/mahindra-xuv-7xo/side.png";
 
 /** Car name → gallery images (first image = card cover). */
 export const CAR_IMAGES: Record<string, string[]> = {
@@ -60,6 +62,7 @@ export const CAR_IMAGES: Record<string, string[]> = {
   "Toyota Innova": [innovaFront, innovaBack],
   "Mahindra Thar": [tharFront, tharBack, tharSide, tharInterior1, tharInterior2],
   "Toyota Innova Crysta": [crystaFront, crystaBack, crystaSide],
+  "Mahindra XUV 7XO - Hitech Luxury": [xuv7xoFront, xuv7xoSide],
 };
 
 export function getCarImages(carName: string): string[] {

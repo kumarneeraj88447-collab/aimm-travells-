@@ -75,11 +75,13 @@ type Category =
   | "Compact SUVs"
   | "MUVs"
   | "Adventure"
-  | "Premium";
+  | "Premium"
+  | "Luxury";
 
 type CarItem = {
   name: string;
   category: Category;
+  alsoCategories?: Category[];
   seats: number;
   transmission: string;
   fuelType: string;
@@ -96,15 +98,30 @@ const CARS: CarItem[] = [
   { name: "Maruti Suzuki Dzire Automatic", category: "Automatic", seats: 5, transmission: "Automatic", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
   { name: "Hyundai Venue", category: "Compact SUVs", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
   { name: "Kia Syros", category: "Compact SUVs", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
-  { name: "Kia Sonet", category: "Compact SUVs", seats: 5, transmission: "Automatic Diesel", fuelType: "Diesel", price12: 2000, price24: 3000, extraHour: 250 },
+  { name: "Kia Sonet", category: "Compact SUVs", seats: 5, transmission: "Automatic & Sunroof", fuelType: "Diesel", price12: 2000, price24: 3000, extraHour: 250 },
   { name: "Maruti Suzuki Brezza", category: "Compact SUVs", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
   { name: "Maruti Suzuki Ertiga", category: "CNG", seats: 7, transmission: "Manual", fuelType: "CNG", price12: 2500, price24: 3500, extraHour: 200 },
   { name: "Toyota Innova", category: "MUVs", seats: 7, transmission: "Manual", fuelType: "Diesel", price12: 2500, price24: 3500, extraHour: 200 },
-  { name: "Mahindra Thar", category: "Adventure", seats: 4, transmission: "Manual 4x4", fuelType: "Diesel", price12: 3500, price24: 4500, extraHour: 200 },
+  { name: "Mahindra Thar", category: "Adventure", seats: 4, transmission: "Manual 4x2", fuelType: "Diesel", price12: 3500, price24: 4500, extraHour: 200 },
   { name: "Toyota Innova Crysta", category: "Premium", seats: 7, transmission: "Manual", fuelType: "Diesel", price12: 3500, price24: 4500, extraHour: 200 },
+  {
+    name: "Mahindra XUV 7XO - Hitech Luxury",
+    category: "Premium",
+    alsoCategories: ["Luxury"],
+    seats: 7,
+    transmission: "Manual",
+    fuelType: "Diesel",
+    price12: 3499,
+    price24: 5000,
+    extraHour: 500,
+  },
 ];
 
-const FILTERS = ["All", "Hatchbacks", "Sedans", "Automatic", "CNG", "Compact SUVs", "MUVs", "Adventure", "Premium"] as const;
+const FILTERS = ["All", "Hatchbacks", "Sedans", "Automatic", "CNG", "Compact SUVs", "MUVs", "Adventure", "Premium", "Luxury"] as const;
+
+function carMatchesFilter(car: CarItem, filter: (typeof FILTERS)[number]) {
+  return car.category === filter || car.alsoCategories?.includes(filter as Category);
+}
 
 // Highlight tags for cars (matches substrings of `car.name`)
 const carHighlights: Record<string, string> = {
@@ -153,7 +170,7 @@ function HomePage() {
           c.transmission.toLowerCase().includes("automatic"),
       );
     }
-    return CARS.filter((c) => c.category === filter);
+    return CARS.filter((c) => carMatchesFilter(c, filter));
   }, [filter]);
 
   return (
@@ -168,7 +185,7 @@ function HomePage() {
             <div className="leading-none min-w-0 flex flex-col items-start">
               <div className="w-full text-left font-bold text-navy text-base sm:text-xl lg:text-2xl tracking-tight whitespace-nowrap">AIM Car Travels</div>
               <div className="w-full text-left text-[10px] sm:text-xs lg:text-sm font-semibold tracking-[0.22em] text-amber-500 whitespace-nowrap">
-                PREMIUM RENTALS
+                PREMIUM SELF DRIVE CARS
               </div>
               <div className="w-full text-center text-[10px] sm:text-xs lg:text-sm font-semibold tracking-[0.22em] text-amber-500 whitespace-nowrap">
                 &
@@ -292,7 +309,7 @@ function HomePage() {
           <div className="absolute -bottom-10 left-0 h-40 w-40 rounded-full bg-accent blur-3xl opacity-40" />
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-5xl text-center">
+          <div className="mx-auto max-w-6xl text-center mb-8 sm:mb-10">
             <h2 className="font-serif font-bold tracking-tight leading-[0.92] text-3xl sm:text-4xl lg:text-6xl text-navy">
               <span className="block">Drive Your Own Story</span>
               <span className="block mt-3">
@@ -300,8 +317,59 @@ function HomePage() {
               </span>
             </h2>
             <p className="mx-auto mt-8 text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl">
-              Premium self-drive car rentals with 100% transparent pricing. Lock down your favorite drive from our elite 13-car collection with a 20% secure advance. No hidden surprises.
+              Premium self-drive car rentals with 100% transparent pricing. Lock down your favorite drive from our elite 14-car collection with a 20% secure advance. No hidden surprises.
             </p>
+          </div>
+
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="text-sm sm:text-base font-extrabold tracking-[0.22em] text-navy mb-3">FAST BOOKING VERIFICATION</div>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-3">
+            <div className="rounded-[28px] border border-[#f3df8c] bg-white/90 shadow-premium p-6 md:p-7 backdrop-blur-sm">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="h-12 w-12 rounded-2xl bg-[#fff6d8] grid place-items-center text-xl font-bold text-[#c28f00]">1</div>
+                <div>
+                  <div className="text-xs font-bold tracking-[0.18em] text-gold">STEP 1</div>
+                  <h3 className="text-xl font-bold text-navy">Elite eligibility checklist</h3>
+                </div>
+              </div>
+              <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed text-left">
+                <p>• Min age <strong className="font-bold text-black">25+</strong></p>
+                <p>• <strong className="font-bold text-black">3+ years</strong> of active LMV licence</p>
+                <p>• <strong className="font-bold text-black">Aadhar card</strong></p>
+                <p>• Two wheeler ( under 5yrs old ) with RC / min <strong className="font-bold text-black">20,000 security deposit</strong></p>
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-[#f3df8c] bg-white/90 shadow-premium p-6 md:p-7 backdrop-blur-sm">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="h-12 w-12 rounded-2xl bg-[#fff6d8] grid place-items-center text-xl font-bold text-[#c28f00]">2</div>
+                <div>
+                  <div className="text-xs font-bold tracking-[0.18em] text-gold">STEP 2</div>
+                  <h3 className="text-xl font-bold text-navy">Reserve your ride in the website theme</h3>
+                </div>
+              </div>
+              <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed text-left">
+                <p>• Choose from our <strong className="font-bold text-black">14-car collection</strong></p>
+                <p>• Pay <strong className="font-bold text-black">20% secure advance</strong> to lock the booking</p>
+                <p>• Enjoy transparent pricing with no hidden surprises</p>
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-[#f3df8c] bg-white/90 shadow-premium p-6 md:p-7 backdrop-blur-sm">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="h-12 w-12 rounded-2xl bg-[#fff6d8] grid place-items-center text-xl font-bold text-[#c28f00]">3</div>
+                <div>
+                  <div className="text-xs font-bold tracking-[0.18em] text-gold">STEP 3</div>
+                  <h3 className="text-xl font-bold text-navy">Secure delivery handover</h3>
+                </div>
+              </div>
+              <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed text-left">
+                <p>• Pay remaining <strong className="font-bold text-black">80% rent at the time of car pickup</strong></p>
+                <p>• <strong className="font-bold text-black">Insurance claims are not applicable on any damages / accidental conditions</strong></p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -313,7 +381,7 @@ function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
             <div>
-              <div className="text-xs font-bold tracking-[0.2em] text-gold mb-3">13 CARS AVAILABLE</div>
+              <div className="text-xs font-bold tracking-[0.2em] text-gold mb-3">{CARS.length} CARS AVAILABLE</div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-navy">Choose your ride</h2>
             </div>
           </div>
@@ -359,7 +427,7 @@ function HomePage() {
                     </div>
                   )}
                   <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-navy text-white text-[10px] font-bold tracking-wider">
-                    {car.category.toUpperCase()}
+                    {[car.category, ...(car.alsoCategories ?? [])].join(" · ").toUpperCase()}
                   </span>
                 </div>
                 <div className="p-6 flex flex-col gap-4 flex-1">
@@ -439,7 +507,7 @@ function HomePage() {
             {[
               { value: "2600", label: "Completed Orders" },
               { value: "2500", label: "Happy Customers" },
-              { value: "13", label: "Vehicles" },
+              { value: "14", label: "Vehicles" },
               { value: "10", label: "Years Experience" },
             ].map((stat) => (
               <div
@@ -601,7 +669,7 @@ function HomePage() {
                       <div className="space-y-2 ml-2">
                         <p>○ Aadhaar Card</p>
                         <p>○ Car Driving License</p>
-                        <p>○ Two-Wheeler with RC</p>
+                        <p>○ Two wheeler with rc / ₹ 20000 as security deposit</p>
                       </div>
                     </div>
                   </div>
@@ -860,10 +928,10 @@ function HomePage() {
                     </div>
                     <div>
                       <div className="font-bold text-navy">AIM Car Travels</div>
-                      <div className="text-[10px] font-semibold tracking-[0.18em] text-amber-500">PREMIUM RENTALS</div>
+                      <div className="text-[10px] font-semibold tracking-[0.18em] text-amber-500">PREMIUM SELF DRIVE CARS & TAXI SERVICES</div>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">Premium self-drive car rentals and taxi services across Vijayawada. Clean cars, honest pricing.</p>
+                  <p className="text-sm text-muted-foreground">Premium self drive cars and taxi services across Vijayawada. Clean cars, honest pricing.</p>
                 </div>
                 <div>
                   <div className="font-bold text-navy mb-4 text-sm">Quick links</div>
@@ -902,6 +970,25 @@ function HomePage() {
           </div>
           <div className="border-t border-border mt-10 pt-6 text-center text-xs text-muted-foreground">
             © {new Date().getFullYear()} AIM Car Travels. All rights reserved.
+            <p className="text-xs text-gray-400 mt-2">
+              Website by{" "}
+              <a
+                href="https://uniscaledigitals.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium hover:text-[#0B1B4D] transition-colors duration-300"
+              >
+                Uniscale Digital
+              </a>
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              <a
+                href="mailto:uniscaledigital@gmail.com"
+                className="hover:text-[#0B1B4D] transition-colors duration-300"
+              >
+                uniscaledigital@gmail.com
+              </a>
+            </p>
           </div>
         </div>
       </footer>
@@ -1108,7 +1195,14 @@ function BookingModal({ car, onClose }: { car: CarItem; onClose: () => void }) {
   }, []);
 
   const extraRate = (() => {
-    if (car.category === "Premium" || car.category === "Adventure") return 500;
+    if (
+      car.category === "Premium" ||
+      car.category === "Luxury" ||
+      car.category === "Adventure" ||
+      car.alsoCategories?.includes("Premium") ||
+      car.alsoCategories?.includes("Luxury")
+    )
+      return 500;
     if (car.category === "Compact SUVs" || car.category === "MUVs") return 250;
     return car.extraHour;
   })();
