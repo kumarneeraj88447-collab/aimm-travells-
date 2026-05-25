@@ -71,6 +71,7 @@ type Category =
   | "Hatchbacks"
   | "Sedans"
   | "Automatic"
+  | "CNG"
   | "Compact SUVs"
   | "MUVs"
   | "Adventure"
@@ -81,28 +82,29 @@ type CarItem = {
   category: Category;
   seats: number;
   transmission: string;
+  fuelType: string;
   price12: number;
   price24: number;
   extraHour: number;
 };
 
 const CARS: CarItem[] = [
-  { name: "Maruti Suzuki Swift", category: "Hatchbacks", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
-  { name: "Maruti Suzuki Baleno", category: "Hatchbacks", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
-  { name: "Hyundai i20", category: "Hatchbacks", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
-  { name: "Maruti Suzuki Swift Dzire", category: "Sedans", seats: 5, transmission: "Manual", price12: 1500, price24: 2500, extraHour: 200 },
-  { name: "Maruti Suzuki Dzire Automatic", category: "Automatic", seats: 5, transmission: "Automatic", price12: 2000, price24: 3000, extraHour: 200 },
-  { name: "Hyundai Venue", category: "Compact SUVs", seats: 5, transmission: "Manual", price12: 2000, price24: 3000, extraHour: 200 },
-  { name: "Kia Syros", category: "Compact SUVs", seats: 5, transmission: "Manual", price12: 2000, price24: 3000, extraHour: 200 },
-  { name: "Kia Sonet", category: "Compact SUVs", seats: 5, transmission: "Automatic Diesel", price12: 2000, price24: 3000, extraHour: 250 },
-  { name: "Maruti Suzuki Brezza", category: "Compact SUVs", seats: 5, transmission: "Manual", price12: 2000, price24: 3000, extraHour: 200 },
-  { name: "Maruti Suzuki Ertiga", category: "MUVs", seats: 7, transmission: "Manual", price12: 2500, price24: 3500, extraHour: 200 },
-  { name: "Toyota Innova", category: "MUVs", seats: 7, transmission: "Manual", price12: 2500, price24: 3500, extraHour: 200 },
-  { name: "Mahindra Thar", category: "Adventure", seats: 4, transmission: "Manual 4x4", price12: 3500, price24: 4500, extraHour: 200 },
-  { name: "Toyota Innova Crysta", category: "Premium", seats: 7, transmission: "Manual", price12: 3500, price24: 4500, extraHour: 200 },
+  { name: "Maruti Suzuki Swift", category: "Hatchbacks", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 1500, price24: 2500, extraHour: 200 },
+  { name: "Maruti Suzuki Baleno", category: "Hatchbacks", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 1500, price24: 2500, extraHour: 200 },
+  { name: "Hyundai i20", category: "Hatchbacks", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 1500, price24: 2500, extraHour: 200 },
+  { name: "Maruti Suzuki Swift Dzire", category: "CNG", seats: 5, transmission: "Manual", fuelType: "CNG", price12: 1500, price24: 2500, extraHour: 200 },
+  { name: "Maruti Suzuki Dzire Automatic", category: "Automatic", seats: 5, transmission: "Automatic", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
+  { name: "Hyundai Venue", category: "Compact SUVs", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
+  { name: "Kia Syros", category: "Compact SUVs", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
+  { name: "Kia Sonet", category: "Compact SUVs", seats: 5, transmission: "Automatic Diesel", fuelType: "Diesel", price12: 2000, price24: 3000, extraHour: 250 },
+  { name: "Maruti Suzuki Brezza", category: "Compact SUVs", seats: 5, transmission: "Manual", fuelType: "Petrol", price12: 2000, price24: 3000, extraHour: 200 },
+  { name: "Maruti Suzuki Ertiga", category: "CNG", seats: 7, transmission: "Manual", fuelType: "CNG", price12: 2500, price24: 3500, extraHour: 200 },
+  { name: "Toyota Innova", category: "MUVs", seats: 7, transmission: "Manual", fuelType: "Diesel", price12: 2500, price24: 3500, extraHour: 200 },
+  { name: "Mahindra Thar", category: "Adventure", seats: 4, transmission: "Manual 4x4", fuelType: "Diesel", price12: 3500, price24: 4500, extraHour: 200 },
+  { name: "Toyota Innova Crysta", category: "Premium", seats: 7, transmission: "Manual", fuelType: "Diesel", price12: 3500, price24: 4500, extraHour: 200 },
 ];
 
-const FILTERS = ["All", "Hatchbacks", "Sedans", "Automatic", "Compact SUVs", "MUVs", "Adventure", "Premium"] as const;
+const FILTERS = ["All", "Hatchbacks", "Sedans", "Automatic", "CNG", "Compact SUVs", "MUVs", "Adventure", "Premium"] as const;
 
 // Highlight tags for cars (matches substrings of `car.name`)
 const carHighlights: Record<string, string> = {
@@ -158,20 +160,20 @@ function HomePage() {
     <div className="min-h-screen bg-background text-foreground">
       {/* NAVBAR */}
       <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-border/60 shadow-[0_2px_20px_-10px_rgba(0,0,0,0.08)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-          <a href="#home" className="flex items-center gap-1 sm:gap-2 lg:gap-3 group shrink-0">
-            <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl bg-white shadow-premium grid place-items-center overflow-hidden ring-1 ring-border shrink-0">
-              <img src={logo} alt="AIM Car Travels" className="h-11 w-11 sm:h-12 sm:w-12 object-contain" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-24 sm:h-28 flex items-center justify-between gap-4">
+          <a href="#home" className="flex items-center gap-2 sm:gap-3 lg:gap-4 group shrink-0">
+            <div className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 rounded-2xl bg-white shadow-premium overflow-hidden ring-1 ring-border shrink-0">
+              <img src={logo} alt="AIM Car Travels" className="h-full w-full object-contain scale-[1.55] sm:scale-[1.6] lg:scale-[1.65]" />
             </div>
             <div className="leading-none min-w-0 flex flex-col items-start">
-              <div className="w-full text-left font-bold text-navy text-sm sm:text-base lg:text-lg tracking-tight whitespace-nowrap">AIM Car Travels</div>
-              <div className="w-full text-left text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.22em] text-gold whitespace-nowrap">
+              <div className="w-full text-left font-bold text-navy text-base sm:text-xl lg:text-2xl tracking-tight whitespace-nowrap">AIM Car Travels</div>
+              <div className="w-full text-left text-[10px] sm:text-xs lg:text-sm font-semibold tracking-[0.22em] text-amber-500 whitespace-nowrap">
                 PREMIUM RENTALS
               </div>
-              <div className="w-full text-center text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.22em] text-gold/70 whitespace-nowrap">
+              <div className="w-full text-center text-[10px] sm:text-xs lg:text-sm font-semibold tracking-[0.22em] text-amber-500 whitespace-nowrap">
                 &
               </div>
-              <div className="w-full text-left text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.22em] text-gold whitespace-nowrap">
+              <div className="w-full text-left text-[10px] sm:text-xs lg:text-sm font-semibold tracking-[0.22em] text-amber-500 whitespace-nowrap">
                 TAXI SERVICES
               </div>
             </div>
@@ -241,8 +243,13 @@ function HomePage() {
                   Welcome to
                 </span>
                 <span className="group block text-5xl sm:text-6xl lg:text-7xl font-serif font-extrabold text-amber-500 drop-shadow-[0_2px_8px_rgba(245,158,11,0.18)] transition-transform duration-300 hover:-translate-y-1">
-                  <span className="inline-block rounded-2xl bg-amber-50/80 px-3 py-1 ring-1 ring-amber-200/70 transition-all duration-300 group-hover:bg-amber-100 group-hover:shadow-[0_12px_30px_-12px_rgba(245,158,11,0.45)]">
-                    AIM Car Travels
+                  <span className="inline-flex flex-col items-center transition-all duration-300 group-hover:drop-shadow-[0_12px_30px_-12px_rgba(245,158,11,0.45)]">
+                    <span className="leading-none tracking-tight">
+                      AIM
+                    </span>
+                    <span className="mt-1 text-4xl sm:text-5xl lg:text-6xl leading-none tracking-tight">
+                      Car Travels
+                    </span>
                   </span>
                 </span>
               </h1>
@@ -279,6 +286,26 @@ function HomePage() {
         </div>
       </section>
 
+      <section className="relative overflow-hidden py-10 sm:py-12 bg-gradient-to-b from-white to-gold-soft/30">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 right-0 h-44 w-44 rounded-full bg-gold-soft blur-3xl opacity-60" />
+          <div className="absolute -bottom-10 left-0 h-40 w-40 rounded-full bg-accent blur-3xl opacity-40" />
+        </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-5xl text-center">
+            <h2 className="font-serif font-bold tracking-tight leading-[0.92] text-3xl sm:text-4xl lg:text-6xl text-navy">
+              <span className="block">Drive Your Own Story</span>
+              <span className="block mt-3">
+                in <span className="text-amber-500">Vijayawada</span>
+              </span>
+            </h2>
+            <p className="mx-auto mt-8 text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl">
+              Premium self-drive car rentals with 100% transparent pricing. Lock down your favorite drive from our elite 13-car collection with a 20% secure advance. No hidden surprises.
+            </p>
+          </div>
+        </div>
+      </section>
+
       
 
       {/* CARS */}
@@ -286,7 +313,7 @@ function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
             <div>
-              <div className="text-xs font-bold tracking-[0.2em] text-gold mb-3">AVAILABLE CARS</div>
+              <div className="text-xs font-bold tracking-[0.2em] text-gold mb-3">13 CARS AVAILABLE</div>
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-navy">Choose your ride</h2>
             </div>
           </div>
@@ -345,8 +372,17 @@ function HomePage() {
                     </div>
                   )}
                   <div className="flex items-center gap-5 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1.5"><Users className="h-4 w-4 text-gold" /> {car.seats} Seats</span>
-                    <span className="flex items-center gap-1.5"><Fuel className="h-4 w-4 text-gold" /> {car.transmission}</span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-soft px-2.5 py-1 text-xs font-semibold text-navy">
+                      <Users className="h-3.5 w-3.5 text-gold" />
+                      {car.seats} Seats
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-soft px-2.5 py-1 text-xs font-semibold text-navy">
+                      {car.transmission}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-soft px-2.5 py-1 text-xs font-semibold text-navy">
+                      <Fuel className="h-3.5 w-3.5 text-gold" />
+                      {car.fuelType}
+                    </span>
                   </div>
                     <div className="flex items-center justify-between pt-3 mt-auto border-t border-border">
                       <div className="flex-1 pr-4">
@@ -824,7 +860,7 @@ function HomePage() {
                     </div>
                     <div>
                       <div className="font-bold text-navy">AIM Car Travels</div>
-                      <div className="text-[10px] font-semibold tracking-[0.18em] text-gold">PREMIUM RENTALS</div>
+                      <div className="text-[10px] font-semibold tracking-[0.18em] text-amber-500">PREMIUM RENTALS</div>
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground">Premium self-drive car rentals and taxi services across Vijayawada. Clean cars, honest pricing.</p>
