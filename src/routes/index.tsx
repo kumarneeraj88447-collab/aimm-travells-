@@ -371,6 +371,9 @@ function HomePage() {
               </div>
             </div>
           </div>
+          <div className="text-center mt-6">
+            <p className="text-sm md:text-base text-muted-foreground"><strong className="font-bold text-black">• Pickup &amp; Drop Service available - * Charges may apply</strong></p>
+          </div>
         </div>
       </section>
 
